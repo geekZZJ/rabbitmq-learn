@@ -26,7 +26,7 @@ public class Send {
         // 声明队列
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         // 发布消息
-        String message = "hello world";
+        String message = "hello world2";
         channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
         // 关闭连接
         System.out.println("发送了消息" + message);
