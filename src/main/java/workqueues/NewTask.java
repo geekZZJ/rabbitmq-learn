@@ -25,7 +25,12 @@ public class NewTask {
         channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
         // 发布消息
         for (int i = 0; i < 10; i++) {
-            String message = i + "...";
+            String message;
+            if (i % 2 == 0) {
+                message = i + "...";
+            } else {
+                message = String.valueOf(i);
+            }
             channel.basicPublish("", TASK_QUEUE_NAME, null, message.getBytes("UTF-8"));
             System.out.println("发送了消息" + message);
         }
