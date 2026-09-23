@@ -1,0 +1,33 @@
+package fanout;
+
+import com.rabbitmq.client.BuiltinExchangeType;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
+// 发送日志信息
+public class EmitLog {
+    private static final String EXCHANGE_NAME = "logs";
+
+    public static void main(String[] args) throws IOException, TimeoutException {
+        // 创建连接工厂
+        ConnectionFactory factory = new ConnectionFactory();
+        // 设置rabbitMQ地址
+        factory.setHost("zhangblog.cn");
+        factory.setUsername("test");
+        factory.setPassword("test");
+        // 建立连接
+        Connection connection = factory.newConnection();
+        // 获得信道
+        Channel channel = connection.createChannel();
+        channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.FANOUT);
+        String message = "info:Hello World";
+        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes("UTF-8"));
+        System.out.println("发送了消息" + message);
+        channel.close();
+        connection.close();
+    }
+}
